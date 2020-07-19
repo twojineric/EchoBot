@@ -3,7 +3,6 @@ const client = new Discord.Client();
 
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  cipher(token);
 });
 
 client.on('messageDelete', msg => {
