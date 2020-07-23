@@ -1,4 +1,5 @@
-# discord-bot
-Bot from scratch
+# EchoBot
+By Eric Jin and Trevor Tsai
 
-Updates coming soon!
+EchoBot currently streams audio from YouTube. Voice recognition and Speech to Text coming soon!
+Responds to "$echo". Use $echo help for a list of commands.
