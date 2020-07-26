@@ -28,36 +28,27 @@ bot.on('message', async msg => {
 
             case 'join':
             {
-                if(msg.member.voice.channel) {
+                if(msg.member.voice.channel)
+                {
                     const connection = await msg.member.voice.channel.join();
-                }else {
+                }
+                else
+                {
                     msg.channel.send('You need to join a voice channel first!');
                 }
+
                 break;
             }
             case 'disconnect':
             case 'leave':
             {
-                // check to see if it is in a channel already
-                if(msg.member.voice.channel && bot.channels.cache.has(msg.member.voice.channel.id))
-                    msg.member.voice.channel.leave();
+                bot.commandsList.get('disconnect').execute(msg, argsArray, bot);
                 break;
             }
             case 'play':
             case 'start':
             {
-                const channel = msg.member.voice.channel;
-                if(!channel) {
-                    msg.channel.send("Please join a voice channel first");
-                }else {
-                    channel.join().then(connection => {
-                        const stream = ytdl('https://www.youtube.com/watch?v=HQXKnvcDTnc', {filter: 'audioonly'});
-                        const dispatcher = connection.play(stream);
-                        dispatcher.on('finish', () => {
-                            msg.channel.send("Done playing!");
-                        });
-                    });
-                }
+                bot.commandsList.get('start').execute(msg, argsArray, ytdl);
                 break;
             }
             case 'help':
@@ -66,7 +57,7 @@ bot.on('message', async msg => {
                 break;
             }
             default:
-                msg.channel.send("Command not found, use $echo help")
+                msg.channel.send("Command not found, use $echo help");
         }
     }
 });
