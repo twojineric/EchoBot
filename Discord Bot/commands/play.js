@@ -1,6 +1,7 @@
 module.exports = {
-	name: 'start',
+	name: 'play',
 	description: 'Streams a youtube video, audio only',
+    aliases:['start', 'p'],
 	execute(msg, argsArray, ytdl)
     {
 

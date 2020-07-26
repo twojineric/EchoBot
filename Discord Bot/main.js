@@ -13,30 +13,27 @@ for(let file of commandFiles)
     bot.commandsList.set(command.name, command);
 }
 
-const keyword = '$echo' //$echo is the command word
+const keyword = '$echo'; //$echo is the command word
+const abbrKey = '$e '; //whitespace after included!
 
 bot.once('ready', () => {
     console.log(`Logged in as ${bot.user.tag}!`);
 });
 
-bot.on('message', async msg => {
+bot.on('message', msg => {
 
-    if(msg.content.substring(0, 5) === keyword && !msg.author.bot) {
-        argsArray = msg.content.substring(keyword.length).trim().split(' ');
+    if((msg.content.substring(0, 5) === keyword || msg.content.substring(0, 3) === abbrKey)
+        && !msg.author.bot)
+    {
+        const argsArray = msg.content.trim().split(/ +/);
+        argsArray.shift(); //removes the keyword
+        const cmd = argsArray.shift();
 
-        switch(argsArray[0]) {
+        switch(cmd) {
 
             case 'join':
             {
-                if(msg.member.voice.channel)
-                {
-                    const connection = await msg.member.voice.channel.join();
-                }
-                else
-                {
-                    msg.channel.send('You need to join a voice channel first!');
-                }
-
+                bot.commandsList.get('join').execute(msg, argsArray);
                 break;
             }
             case 'disconnect':
@@ -48,7 +45,7 @@ bot.on('message', async msg => {
             case 'play':
             case 'start':
             {
-                bot.commandsList.get('start').execute(msg, argsArray, ytdl);
+                bot.commandsList.get('play').execute(msg, argsArray, ytdl);
                 break;
             }
             case 'help':
@@ -58,6 +55,7 @@ bot.on('message', async msg => {
             }
             default:
                 msg.channel.send("Command not found, use $echo help");
+
         }
     }
 });
