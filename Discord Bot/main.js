@@ -30,35 +30,23 @@ bot.on('message', msg => {
     {
         const argsArray = msg.content.trim().split(/ +/);
         argsArray.shift(); //removes the keyword
-        const cmd = argsArray.shift();
+        const cmd = argsArray.shift().toLowerCase();
 
-        switch(cmd) {
 
-            case 'join':
-            {
-                bot.commandsList.get('join').execute(msg, argsArray);
-                break;
+        if(bot.commandsList.has(cmd) == false)
+        {
+            msg.channel.send("Command not found, use $echo help");
+        }
+        else
+        {
+            try{
+                bot.commandsList.get(cmd).execute(msg, argsArray);
+            } catch(err){
+                console.log("Caught " + err);
+                msg.channel.send("Error in executing the command.");
             }
-            case 'disconnect':
-            case 'leave':
-            {
-                bot.commandsList.get('disconnect').execute(msg, argsArray);
-                break;
-            }
-            case 'play':
-            case 'start':
-            {
-                bot.commandsList.get('play').execute(msg, argsArray);
-                break;
-            }
-            case 'help':
-            {
-                bot.commandsList.get('help').execute(msg, argsArray);
-                break;
-            }
-            default:
-                msg.channel.send("Command not found, use $echo help");
 
         }
+
     }
 });
