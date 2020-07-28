@@ -1,4 +1,5 @@
 const fs = require ('fs');
+require('dotenv').config();
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
 
@@ -20,6 +21,8 @@ bot.once('ready', () => {
     console.log(`Logged in as ${bot.user.tag}!`);
 });
 
+bot.login(process.env.DISCORD_TOKEN);
+
 bot.on('message', msg => {
 
     if((msg.content.substring(0, 5) === keyword || msg.content.substring(0, 3) === abbrKey)
@@ -39,13 +42,13 @@ bot.on('message', msg => {
             case 'disconnect':
             case 'leave':
             {
-                bot.commandsList.get('disconnect').execute(msg, argsArray, bot);
+                bot.commandsList.get('disconnect').execute(msg, argsArray);
                 break;
             }
             case 'play':
             case 'start':
             {
-                bot.commandsList.get('play').execute(msg, argsArray, ytdl);
+                bot.commandsList.get('play').execute(msg, argsArray);
                 break;
             }
             case 'help':
@@ -59,7 +62,3 @@ bot.on('message', msg => {
         }
     }
 });
-
-// possibly obscure this later
-let token = "NzM0MTc0OTk4Njc5Mzg4MTkw.XxON7g.w8n4Haq_pcQomv70hWPMu19OUv";
-bot.login(token + "I");

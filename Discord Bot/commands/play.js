@@ -1,8 +1,9 @@
+const ytdl = require('ytdl-core');
 module.exports = {
 	name: 'play',
 	description: 'Streams a youtube video, audio only',
     aliases:['start', 'p'],
-	execute(msg, argsArray, ytdl)
+	execute(msg, argsArray)
     {
 
         const channel = msg.member.voice.channel;
