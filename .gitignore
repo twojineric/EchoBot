@@ -1,4 +1,4 @@
 node_modules/
 Discord Bot/node_modules
 .env
-Discord Bot/nbproject/*
+/Discord Bot/nbproject/*
