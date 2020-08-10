@@ -24,14 +24,13 @@ bot.login(process.env.DISCORD_TOKEN);
 
 bot.on('message', msg => {
 
-    if((msg.content.substring(0, 5) === keyword || msg.content.substring(0, 3) === abbrKey)
-            && !msg.author.bot){
+    if((msg.content.substring(0, 5) === keyword || msg.content.substring(0, 3) === abbrKey) && !msg.author.bot){
         const argsArray = msg.content.trim().split(/ +/);
         argsArray.shift(); //removes the keyword
         const cmd = argsArray.shift().toLowerCase();
 
 
-        if(bot.commandsList.has(cmd) == false){
+        if(!bot.commandsList.has(cmd)){
             msg.channel.send("Command not found, use $echo help");
         }else{
             try{
