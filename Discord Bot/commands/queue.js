@@ -45,7 +45,7 @@ module.exports = {
 
             // since the serverQueue didnt't exist, there wasn't a video already playing. Attempt to play the song.
             try{
-                play.execute(msg, this.globalQueue, newServerQueue);
+                play.execute(msg, newServerQueue);
             }catch(err){
                 console.error(err);
                 msg.channel.send("Error in playing the song");
