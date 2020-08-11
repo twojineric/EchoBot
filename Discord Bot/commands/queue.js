@@ -36,7 +36,8 @@ module.exports = {
                 textChannel: msg.channel,
                 connection: null,
                 songs: [],
-                playing: true
+                playing: true,
+                streamDispatcher: null
             };
 
             // add this newly created server queue to the global queue and add in the song

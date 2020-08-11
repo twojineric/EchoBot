@@ -34,9 +34,9 @@ module.exports = {
                 serverQueue.connection = connection;
                 msg.channel.send(`Playing: ${song.title}`);
                 const stream = ytdl(song.url, {filter: 'audioonly'});
-                const dispatcher = connection.play(stream);
+                serverQueue.streamDispatcher = connection.play(stream);
                 // when we're done, shift the array and play again until queue is empty
-                dispatcher.on('finish', () => {
+                serverQueue.streamDispatcher.on('finish', () => {
                     msg.channel.send("Done playing!");
                     serverQueue.songs.shift();
                     this.execute(msg, serverQueue);
