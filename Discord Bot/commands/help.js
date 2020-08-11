@@ -3,7 +3,7 @@ module.exports = {
     name: 'help',
     description: 'List all commands and their usage.',
     aliases: ['?'],
-    execute(msg, argsArray){
+    execute(msg){
         msg.channel.send(command_messages.HELP_MESSAGE);
     },
 };

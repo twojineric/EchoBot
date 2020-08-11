@@ -4,7 +4,7 @@ module.exports = {
     name: "pause",
     description: "Pauses a currently playing video or unpauses a paused one, if applicable.",
     aliases: ['unpause'],
-    execute(msg, argsArray){
+    execute(msg){
         var serverQueue = queue.globalQueue.get(msg.guild.id);
         // check if there is a song playing
         if(!serverQueue){

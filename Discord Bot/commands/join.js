@@ -1,4 +1,4 @@
-const command_messages = require('../command_messages')
+const command_messages = require('../command_messages');
 module.exports = {
     name: 'join',
     description: 'Joins the channel the user is in.',

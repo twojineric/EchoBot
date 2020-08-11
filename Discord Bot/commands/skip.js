@@ -4,7 +4,7 @@ const command_messages = require('../command_messages.json')
 module.exports = {
     name: 'skip',
     description: 'Skips the current playing song, if there is one.',
-    execute(msg, argsArray){
+    execute(msg){
         const globalQueue = queue.globalQueue;
         const serverQueue = globalQueue.get(msg.guild.id);
         
