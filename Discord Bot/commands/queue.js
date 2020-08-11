@@ -56,5 +56,5 @@ module.exports = {
             serverQueue.songs.push(song);
             msg.channel.send(`${song.title} has been added to the queue`);
         }
-    },
+    }
 };

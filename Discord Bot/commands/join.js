@@ -10,6 +10,5 @@ module.exports = {
             msg.channel.send('You need to join a voice channel first!');
             return false;
         }
-
-    },
+    }
 };

@@ -7,5 +7,5 @@ module.exports = {
         // if they are in a voice channel, then disconnect
         if(voiceChannel && msg.client.channels.cache.has(voiceChannel.id))
             voiceChannel.leave();
-    },
+    }
 };

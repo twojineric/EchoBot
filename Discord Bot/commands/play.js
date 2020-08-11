@@ -26,7 +26,7 @@ module.exports = {
             disconnect.execute(msg);
             // since the queue is empty, we delete it from the global map
             globalQueue.delete(msg.guild.id);
-            msg.channel.send("No more songs to play");
+            msg.channel.send("Queue empty, no more songs to play.");
             return;
         }else{
             // join and begin to play the song
@@ -43,5 +43,5 @@ module.exports = {
                 });
             });
         }
-    },
+    }
 };
