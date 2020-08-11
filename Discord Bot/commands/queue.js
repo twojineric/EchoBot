@@ -22,6 +22,7 @@ module.exports = {
         }else if(!ytdl.validateURL(URL)){
             msg.channel.send("Searching...");
             search.execute(msg, argsArray);
+            return;
         }
 
         // retrieve this server's song queue, if it exists

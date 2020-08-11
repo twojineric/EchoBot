@@ -35,6 +35,7 @@ module.exports = {
                 var url = searchResults["items"][0]['link'].toString();
                 var urlArray = [];
                 urlArray.push(url);
+                msg.channel.send("Searching...");
                 queue.execute(msg, urlArray);
                 return;
             });

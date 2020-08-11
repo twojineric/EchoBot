@@ -32,25 +32,32 @@ bot.login(process.env.DISCORD_TOKEN);
 
 bot.on('message', msg => {
     // if the keyword does not match or the sender is a bot, don't do anything
-    if((!msg.content.substring(0, 5) === keyword && !msg.content.substring(0, 3) === abbrKey) || msg.author.bot){
-        return;
-    }
-    
-    // transforms the message into an array of words
-    const argsArray = msg.content.trim().split(/ +/);
-    argsArray.shift(); //removes the keyword
-    const cmd = argsArray.shift().toLowerCase();
+    if((msg.content.substring(0, 5) === keyword || msg.content.substring(0, 3) === abbrKey) && !msg.author.bot){
 
-    // perform the appropriate action for the command
-    if(!bot.commandsList.has(cmd)){
-        msg.channel.send(command_messages.COMMAND_NOT_FOUND);
-    }else{
-        try{
-            bot.commandsList.get(cmd).execute(msg, argsArray);
-        }catch(err){
-            console.error("Caught " + err);
-            msg.channel.send(`${command_messages.COMMAND_ERROR} ${cmd}.`);
+        // transforms the message into an array of words
+        const argsArray = msg.content.trim().split(/ +/);
+
+        if(argsArray.length < 2)
+        {
+            msg.channel.send("You need to specify a command!");
+            return;
+        }
+        argsArray.shift(); //removes keyword
+        const cmd = argsArray.shift().toLowerCase();
+
+        // perform the appropriate action for the command
+        if(!bot.commandsList.has(cmd)){
+            msg.channel.send(command_messages.COMMAND_NOT_FOUND);
+        }else{
+            try{
+                bot.commandsList.get(cmd).execute(msg, argsArray);
+            }catch(err){
+                console.error("Caught " + err);
+                msg.channel.send(`${command_messages.COMMAND_ERROR} ${cmd}.`);
+            }
         }
     }
+
+
 
 });
