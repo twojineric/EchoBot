@@ -1,10 +1,10 @@
-"use strict";
 const ytdl = require('ytdl-core');
 const join = require('./join.js');
 const play = require('./play.js');
+const command_messages = require('../command_messages.json');
 module.exports = {
     name: 'queue',
-    description: 'Adds a video to the queue',
+    description: 'Adds a video to the queue.',
     globalQueue: new Map(), // maps from guild.id (string) to song queues. Empty queues are deleted.
     async execute(msg, argsArray){
         const URL = argsArray[0];
@@ -13,7 +13,7 @@ module.exports = {
         if(!join.execute(msg, argsArray)){
             return;
         }else if(!ytdl.validateURL(URL)){
-            msg.channel.send("Invalid URL");
+            msg.channel.send(command_messages.INVALID_URL);
             return;
         }
 
@@ -49,7 +49,7 @@ module.exports = {
                 play.execute(msg, newServerQueue);
             }catch(err){
                 console.error(err);
-                msg.channel.send("Error in playing the song");
+                msg.channel.send(command_messages.SONG_ERROR);
                 return;
             }
         }else{
@@ -57,5 +57,5 @@ module.exports = {
             serverQueue.songs.push(song);
             msg.channel.send(`${song.title} has been added to the queue`);
         }
-    }
+    },
 };

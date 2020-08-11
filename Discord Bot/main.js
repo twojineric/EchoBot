@@ -1,5 +1,6 @@
 const fs = require('fs');
 require('dotenv').config();
+require('./command_messages.json');
 const Discord = require('discord.js');
 
 const bot = new Discord.Client();
@@ -11,6 +12,13 @@ var commandFiles = commandFiles.filter(file => file.endsWith('.js'));
 for(let file of commandFiles){
     const command = require(`./commands/${file}`);
     bot.commandsList.set(command.name, command);
+
+    // check if the command has aliases and add those in appropriately
+    if(command.aliases){
+        for(let alias of command.aliases){
+            bot.commandsList.set(alias, command);
+        }
+    }
 }
 
 const keyword = '$echo'; //$echo is the command word
@@ -23,24 +31,26 @@ bot.once('ready', () => {
 bot.login(process.env.DISCORD_TOKEN);
 
 bot.on('message', msg => {
-    // if the first word matches the keyword/abbreviation and if the user is not a bot, parse and execute appropriately
-    if((msg.content.substring(0, 5) === keyword || msg.content.substring(0, 3) === abbrKey) && !msg.author.bot){
+    // if the keyword does not match or the sender is a bot, don't do anything
+    if((!msg.content.substring(0, 5) === keyword && !msg.content.substring(0, 3) === abbrKey) || msg.author.bot){
+        return;
+    }
+    
+    // transforms the message into an array of words
+    const argsArray = msg.content.trim().split(/ +/);
+    argsArray.shift(); //removes the keyword
+    const cmd = argsArray.shift().toLowerCase();
 
-        // transforms the message into an array of words
-        const argsArray = msg.content.trim().split(/ +/);
-        argsArray.shift(); //removes the keyword
-        const cmd = argsArray.shift().toLowerCase();
-
-        // perform the appropriate action for the command
-        if(!bot.commandsList.has(cmd)){
-            msg.channel.send("Command not found, use $echo help");
-        }else{
-            try{
-                bot.commandsList.get(cmd).execute(msg, argsArray);
-            }catch(err){
-                console.error("Caught " + err);
-                msg.channel.send("Error executing the command.");
-            }
+    // perform the appropriate action for the command
+    if(!bot.commandsList.has(cmd)){
+        msg.channel.send("Command not found, use $echo help");
+    }else{
+        try{
+            bot.commandsList.get(cmd).execute(msg, argsArray);
+        }catch(err){
+            console.error("Caught " + err);
+            msg.channel.send("Error executing the command.");
         }
     }
+
 });

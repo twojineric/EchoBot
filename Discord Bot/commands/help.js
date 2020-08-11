@@ -1,7 +1,9 @@
+const command_messages = require('../command_messages.json');
 module.exports = {
     name: 'help',
-    description: 'List of all commands and how to use them',
+    description: 'List all commands and their usage.',
+    aliases: ['?'],
     execute(msg, argsArray){
-        msg.channel.send('Here To Help!!');
-    }
+        msg.channel.send(command_messages.HELP_MESSAGE);
+    },
 };
