@@ -4,6 +4,7 @@ module.exports = {
     aliases: ['leave', 'd'],
     execute(msg, argsArray){
         const voiceChannel = msg.member.voice.channel;
+        // if they are in a voice channel, then disconnect
         if(voiceChannel && msg.client.channels.cache.has(voiceChannel.id))
             voiceChannel.leave();
     },

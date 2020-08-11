@@ -1,3 +1,4 @@
+"use strict";
 const ytdl = require('ytdl-core');
 const join = require('./join.js');
 const play = require('./play.js');
@@ -21,20 +22,12 @@ module.exports = {
         const serverQueue = this.globalQueue.get(msg.guild.id);
 
         // create a song object for the info for this video, which is guaranteed to be a valid URL
-        /*
          const songInfo = await ytdl.getInfo(URL);
          const song = {
          title: songInfo.videoDetails.title,
          url: songInfo.videoDetails.video_url,
          };
-         */
-        var song;
-        ytdl.getInfo(URL, songInfo => {
-            song = {
-                title: songInfo.videoDetails.title,
-                url: songInfo.videoDetails.video_url
-            };
-        });
+         
 
         // now, add the song into the queue. To do so, check if the queue exists
         if(!serverQueue){

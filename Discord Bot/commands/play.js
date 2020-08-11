@@ -1,6 +1,5 @@
 const ytdl = require('ytdl-core');
 const disconnect = require('./disconnect.js');
-const queue = require('queue.js');
 module.exports = {
     name: 'play',
     description: 'Streams a youtube video, audio only',
@@ -27,7 +26,6 @@ module.exports = {
                 msg.channel.send("Done playing!");
                 serverQueue.songs.shift();
                 this.execute(msg, queue, queueConst);
-
             });
         });
 

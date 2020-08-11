@@ -1,7 +1,6 @@
 const fs = require('fs');
 require('dotenv').config();
 const Discord = require('discord.js');
-const ytdl = require('ytdl-core');
 
 const bot = new Discord.Client();
 bot.commandsList = new Discord.Collection(); //Map (Collection) of commands
