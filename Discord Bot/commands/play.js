@@ -1,12 +1,11 @@
 const ytdl = require('ytdl-core');
-const disconnect = require('./disconnect.js');
 const command_messages = require('../command_messages.json');
 module.exports = {
     name: 'play',
     description: 'Streams a youtube video, audio only.',
     aliases: ['start'],
-    execute(msg, serverQueue){        
-        // we require() queue here instead of outside so as to avoid an infinite require loop, which causes errors
+    execute(msg, serverQueue){   
+        const disconnect = require('./disconnect.js');
         const queue = require('./queue.js');
 
         /*
@@ -24,9 +23,7 @@ module.exports = {
 
         // check if song is defined. If it's not, the queue is empty.
         if(!song){
-            disconnect.execute(msg);
-            // since the queue is empty, we delete it from the global map
-            globalQueue.delete(msg.guild.id);
+            disconnect.execute(msg); // disconnect will also delete the queue for us
             msg.channel.send(command_messages.QUEUE_EMPTY);
             return;
         }else{

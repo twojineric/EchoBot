@@ -5,7 +5,9 @@
     "QUEUE_EMPTY":"Queue empty, no more songs to play.",
     "INVALID_URL": "Invalid URL.",
     "SONG_ERROR": "Error playing the song.",
-    "COMMAND_ERROR": "Error executing the command.",
+    "COMMAND_ERROR": "Error executing the command:",
     "COMMAND_NOT_FOUND": "Command not found, use $echo help.",
-    "NO_SONG_PLAYING": "No song playing right now."
+    "NO_SONG_PLAYING": "No song playing right now.",
+    "ALREADY_UNPAUSED": "is currently not paused.",
+    "ALREADY_PAUSED": "is currently already paused."
 }

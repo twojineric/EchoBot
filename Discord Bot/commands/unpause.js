@@ -1,7 +1,7 @@
 const command_messages = require('../command_messages.json');
 module.exports = {
-    name: "pause",
-    description: "Pauses a currently playing video, if applicable.",
+    name: 'unpause',
+    description: 'Unpauses a currently paused video, if applicable.',
     execute(msg){
         const queue = require('./queue.js');
         
@@ -12,12 +12,12 @@ module.exports = {
         }else{
             var isPaused = serverQueue.streamDispatcher.paused;
             if(!isPaused){
-                serverQueue.streamDispatcher.pause(false);
-                msg.channel.send(`Paused: ${serverQueue.songs[0].title}`);
+                // if it's not paused, then unpause shoulnd't do anything
+                msg.channel.send(`${serverQueue.songs[0].title} ${command_messages.ALREADY_UNPAUSED}`);
             }else{
-                // if it's already paused, notify them, but otherwise do nothing
-                msg.channel.send(`${serverQueue.songs[0].title} ${command_messages.ALREADY_PAUSED}`);
+                serverQueue.streamDispatcher.resume();
+                msg.channel.send(`Unpaused: ${serverQueue.songs[0].title}`);
             }
         }
     },
-};
+}

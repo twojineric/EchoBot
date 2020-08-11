@@ -1,6 +1,6 @@
 const fs = require('fs');
 require('dotenv').config();
-require('./command_messages.json');
+const command_messages = require('./command_messages.json');
 const Discord = require('discord.js');
 
 const bot = new Discord.Client();
@@ -43,13 +43,13 @@ bot.on('message', msg => {
 
     // perform the appropriate action for the command
     if(!bot.commandsList.has(cmd)){
-        msg.channel.send("Command not found, use $echo help");
+        msg.channel.send(command_messages.COMMAND_NOT_FOUND);
     }else{
         try{
             bot.commandsList.get(cmd).execute(msg, argsArray);
         }catch(err){
             console.error("Caught " + err);
-            msg.channel.send("Error executing the command.");
+            msg.channel.send(`${command_messages.COMMAND_ERROR} ${cmd}.`);
         }
     }
 

@@ -1,14 +1,14 @@
 const ytdl = require('ytdl-core');
-const join = require('./join.js');
-const play = require('./play.js');
 const command_messages = require('../command_messages.json');
 module.exports = {
     name: 'queue',
     description: 'Adds a video to the queue.',
     globalQueue: new Map(), // maps from guild.id (string) to song queues. Empty queues are deleted.
     async execute(msg, argsArray){
+        const join = require('./join.js');
+        const play = require('./play.js');
+        
         const URL = argsArray[0];
-
         // check if they are already in a channel and, if so, if they provided a valid URL
         if(!join.execute(msg, argsArray)){
             return;
@@ -22,12 +22,12 @@ module.exports = {
         const serverQueue = this.globalQueue.get(msg.guild.id);
 
         // create a song object for the info for this video, which is guaranteed to be a valid URL
-         const songInfo = await ytdl.getInfo(URL);
-         const song = {
-         title: songInfo.videoDetails.title,
-         url: songInfo.videoDetails.video_url,
-         };
-         
+        const songInfo = await ytdl.getInfo(URL);
+        const song = {
+            title: songInfo.videoDetails.title,
+            url: songInfo.videoDetails.video_url,
+        };
+
 
         // now, add the song into the queue. To do so, check if the queue exists
         if(!serverQueue){
