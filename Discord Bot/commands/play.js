@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core');
-const disconnect = require('./disconnect.js')
+const disconnect = require('./disconnect.js');
+const queue = require('queue.js');
 module.exports = {
     name: 'play',
     description: 'Streams a youtube video, audio only',
@@ -10,9 +11,8 @@ module.exports = {
         const serverQueue = queue.get(msg.guild.id);
         const song = queueConst.songs[0];
 
-        if(!song)
-        {
-            disconnect.execute(msg, null);
+        if(!song){
+            disconnect.execute(msg);
             queue.delete(msg.guild.id);
             msg.channel.send("No more songs to play");
             return;
@@ -23,7 +23,7 @@ module.exports = {
             msg.channel.send(`Playing: ${song.title}`);
             const stream = ytdl(song.url, {filter: 'audioonly'});
             const dispatcher = connection.play(stream);
-        dispatcher.on('finish', () => {
+            dispatcher.on('finish', () => {
                 msg.channel.send("Done playing!");
                 serverQueue.songs.shift();
                 this.execute(msg, queue, queueConst);

@@ -4,54 +4,64 @@ const play = require('./play.js');
 module.exports = {
     name: 'queue',
     description: 'Adds a video to the queue',
-    globalQueue: new Map(), //stores guilds that are currently using the bot
+    globalQueue: new Map(), // maps from guild.id (string) to song queues. Empty queues are deleted.
     async execute(msg, argsArray){
+        const URL = argsArray[0];
 
-    const queue = this.globalQueue;
-        if(!join.execute(msg, argsArray))
-        {
+        // check if they are already in a channel and, if so, if they provided a valid URL
+        if(!join.execute(msg, argsArray)){
             return;
-        }
-        else if(!ytdl.validateURL(argsArray[0]))
-        {
+        }else if(!ytdl.validateURL(URL)){
             msg.channel.send("Invalid URL");
             return;
         }
 
+        // retrieve this server's song queue, if it exists
         const channel = msg.member.voice.channel;
-        const serverQueue = queue.get(msg.guild.id);
+        const serverQueue = this.globalQueue.get(msg.guild.id);
 
-        const songInfo = await ytdl.getInfo(argsArray[0]);
-        const song = {
-            title: songInfo.videoDetails.title,
-            url: songInfo.videoDetails.video_url,
+        // create a song object for the info for this video, which is guaranteed to be a valid URL
+        /*
+         const songInfo = await ytdl.getInfo(URL);
+         const song = {
+         title: songInfo.videoDetails.title,
+         url: songInfo.videoDetails.video_url,
+         };
+         */
+        var song;
+        ytdl.getInfo(URL, songInfo => {
+            song = {
+                title: songInfo.videoDetails.title,
+                url: songInfo.videoDetails.video_url
             };
+        });
 
-        if(!serverQueue)
-        {
-            const queueConstructor = {
+        // now, add the song into the queue. To do so, check if the queue exists
+        if(!serverQueue){
+            // if there's no queue for this server, let's construct one
+            const newServerQueue = {
                 textChannel: msg.channel,
                 connection: null,
                 songs: [],
                 playing: true
             };
 
-            queue.set(msg.guild.id, queueConstructor);
-            queueConstructor.songs.push(song);
+            // add this newly created server queue to the global queue and add in the song
+            this.globalQueue.set(msg.guild.id, newServerQueue);
+            newServerQueue.songs.push(song);
 
+            // since the serverQueue didnt't exist, there wasn't a video already playing. Attempt to play the song.
             try{
-                play.execute(msg, queue, queueConstructor);
-            } catch (err) {
-                console.log(err);
+                play.execute(msg, this.globalQueue, newServerQueue);
+            }catch(err){
+                console.error(err);
                 msg.channel.send("Error in playing the song");
                 return;
             }
-        }
-        else
-        {
+        }else{
+            // it already exists, which implies a song is already playing. Add the song into the queue
             serverQueue.songs.push(song);
             msg.channel.send(`${song.title} has been added to the queue`);
         }
-
     },
 };
