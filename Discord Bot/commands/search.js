@@ -1,22 +1,23 @@
 const ytsr = require('ytsr');
 ytsr.do_warn_deprecate = false;
+const command_messages = require('../command_messages.json');
 module.exports = {
     name: 'search',
-    description: 'Searches youtube for the string input and returns a URL.',
+    description: 'Searches youtube with string input and returns a URL.',
     execute(msg, argsArray){
 
+        // construct the search phrase using the words in the argument array
         var searchTerm = "";
-        for(let word of argsArray)
-        {
-            searchTerm = searchTerm + " " + word;
+        for(let word of argsArray){
+            searchTerm += " " + word;
         }
         searchTerm.trim();
 
+        // now, search for the video with our search phrase
         var filters;
-        ytsr.getFilters(searchTerm , function(err, filters) {
-            if(err)
-            {
-                msg.channel.send("Error when searching");
+        ytsr.getFilters(searchTerm, function(err, filters){
+            if(err){
+                msg.channel.send(command_messages.SEARCH_ERROR);
                 return;
             }
             filter = filters.get('Type').find(obj => obj.name === 'Video');
@@ -25,18 +26,16 @@ module.exports = {
                 limit: 5,
                 nextpageRef: filter.ref,
             }
-            ytsr(null, options, function(err, searchResults) {
+            ytsr(null, options, function(err, searchResults){
                 const queue = require('./queue.js');
-                if(err)
-                {
-                    msg.channel.send("Error when searching");
+                if(err){
+                    msg.channel.send(command_messages.SEARCH_ERROR);
                     return;
                 }
                 var url = searchResults["items"][0]['link'].toString();
-                var urlArray = [];
-                urlArray.push(url);
                 msg.channel.send("Searching...");
-                queue.execute(msg, urlArray);
+                // as queue is meant to be used with a string array, we put our URL into a one-element array and pass it
+                queue.execute(msg, [url]);
                 return;
             });
         });

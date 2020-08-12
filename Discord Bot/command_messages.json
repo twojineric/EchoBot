@@ -9,5 +9,9 @@
     "COMMAND_NOT_FOUND": "Command not found, use $echo help.",
     "NO_SONG_PLAYING": "No song playing right now.",
     "ALREADY_UNPAUSED": "is currently not paused.",
-    "ALREADY_PAUSED": "is currently already paused."
+    "ALREADY_PAUSED": "is currently already paused.",
+    "NO_URL_SPECIFIED": "Please specify a URL or search keyword phrase.",
+    "SEARCHING_FOR_SONG": "Searching for song...",
+    "ADDED_TO_QUEUE": "has been added to the queue.",
+    "SEARCH_ERROR": "Error while searching."
 }

@@ -9,8 +9,8 @@ module.exports = {
         const queue = require('./queue.js');
 
         /*
-         * Check if play() is called directly by the user. If so, it should act equivalently to queue(). In that case,
-         * we'll just call queue() then instead.
+         * Check if play() is called directly by the user. If so, it should act equivalently to queue().
+         * In that case, we'll just call queue() then instead.
          */
         if(Array.isArray(serverQueue)){
             queue.execute(msg, serverQueue);

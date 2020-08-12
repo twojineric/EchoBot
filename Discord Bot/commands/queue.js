@@ -1,6 +1,5 @@
 const ytdl = require('ytdl-core');
 const command_messages = require('../command_messages.json');
-const search = require('./search.js');
 module.exports = {
     name: 'queue',
     description: 'Adds a video to the queue.',
@@ -8,25 +7,30 @@ module.exports = {
     async execute(msg, argsArray){
         const join = require('./join.js');
         const play = require('./play.js');
+        const search = require('./search.js');
 
-        if(argsArray.length == 0)
-        {
-            msg.channel.send("Please specify a search or URL");
+        // handle the empty arguments case
+        if(argsArray.length === 0){
+            msg.channel.send(command_messages.NO_URL_SPECIFIED);
             return;
         }
 
         var URL = argsArray[0];
-        // check if they are already in a channel and, if so, if they provided a valid URL
+        /* Attempt to join the user's channel, if they are in one, by delegating to the join command.
+         * Next, check if the string provided is a valid URL. If it is not, treat it as a series of search keywords.
+         * Then, attempt to search for a corresponding video.
+         */
         if(!join.execute(msg, argsArray)){
             return;
-        }else if(!ytdl.validateURL(URL)){
-            msg.channel.send("Searching...");
+        }else if(argsArray.length > 1 || !ytdl.validateURL(URL)){ // URL will only have one argument, guaranteed
+            msg.channel.send(command_messages.SEARCHING_FOR_SONG);
             search.execute(msg, argsArray);
             return;
         }
 
+        // at this point, the URL has been validated, and we know it's a URL (not a search pattern)
+
         // retrieve this server's song queue, if it exists
-        const channel = msg.member.voice.channel;
         const serverQueue = this.globalQueue.get(msg.guild.id);
 
         // create a song object for the info for this video, which is guaranteed to be a valid URL
@@ -62,7 +66,7 @@ module.exports = {
         }else{
             // it already exists, which implies a song is already playing. Add the song into the queue
             serverQueue.songs.push(song);
-            msg.channel.send(`${song.title} has been added to the queue`);
+            msg.channel.send(`${song.title} ${command_messages.ADDED_TO_QUEUE}`);
         }
     },
 };
