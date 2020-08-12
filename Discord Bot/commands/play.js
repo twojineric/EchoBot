@@ -30,7 +30,7 @@ module.exports = {
             // join and begin to play the song
             channel.join().then(connection => {
                 serverQueue.connection = connection;
-                msg.channel.send(`Playing: ${song.title}`);
+                msg.channel.send(`Playing: **${song.title}**`);
                 const stream = ytdl(song.url, {filter: 'audioonly'});
                 serverQueue.streamDispatcher = connection.play(stream);
                 // when we're done, shift the array and play again until queue is empty

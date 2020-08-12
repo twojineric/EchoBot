@@ -15,7 +15,7 @@ module.exports = {
             return;
         }
         const skippedSong = serverQueue.songs.shift();
-        msg.channel.send(`Skipped: ${skippedSong.title}`);
+        msg.channel.send(`Skipped: **${skippedSong.title}**`);
         play.execute(msg, serverQueue);
     },
 };

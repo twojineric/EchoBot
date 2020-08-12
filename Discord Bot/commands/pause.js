@@ -13,10 +13,10 @@ module.exports = {
             var isPaused = serverQueue.streamDispatcher.paused;
             if(!isPaused){
                 serverQueue.streamDispatcher.pause(false);
-                msg.channel.send(`Paused: ${serverQueue.songs[0].title}`);
+                msg.channel.send(`Paused: **${serverQueue.songs[0].title}**`);
             }else{
                 // if it's already paused, notify them, but otherwise do nothing
-                msg.channel.send(`${serverQueue.songs[0].title} ${command_messages.ALREADY_PAUSED}`);
+                msg.channel.send(`**${serverQueue.songs[0].title}** ${command_messages.ALREADY_PAUSED}`);
             }
         }
     },

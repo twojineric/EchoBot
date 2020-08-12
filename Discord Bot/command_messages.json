@@ -2,7 +2,7 @@
     "HELP_MESSAGE": "Here to help!",
     "NOT_IN_VOICE_CHANNEL": "You need to join a voice channel first.",
     "DONE_PLAYING_VIDEO": "Done playing video.",
-    "QUEUE_EMPTY":"Queue empty, no more songs to play.",
+    "QUEUE_EMPTY":"Queue empty; no more songs to play.",
     "INVALID_URL": "Invalid URL.",
     "SONG_ERROR": "Error playing the song.",
     "COMMAND_ERROR": "Error executing the command:",

@@ -11,7 +11,8 @@ module.exports = {
 
         // handle the empty arguments case
         if(argsArray.length === 0){
-            msg.channel.send(command_messages.NO_URL_SPECIFIED);
+            const nowPlaying = require('./nowPlaying.js');
+            nowPlaying.execute(msg);
             return;
         }
 
@@ -66,7 +67,7 @@ module.exports = {
         }else{
             // it already exists, which implies a song is already playing. Add the song into the queue
             serverQueue.songs.push(song);
-            msg.channel.send(`${song.title} ${command_messages.ADDED_TO_QUEUE}`);
+            msg.channel.send(`**${song.title}** ${command_messages.ADDED_TO_QUEUE}`);
         }
     },
 };

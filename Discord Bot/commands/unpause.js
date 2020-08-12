@@ -13,10 +13,10 @@ module.exports = {
             var isPaused = serverQueue.streamDispatcher.paused;
             if(!isPaused){
                 // if it's not paused, then unpause shoulnd't do anything
-                msg.channel.send(`${serverQueue.songs[0].title} ${command_messages.ALREADY_UNPAUSED}`);
+                msg.channel.send(`**${serverQueue.songs[0].title}** ${command_messages.ALREADY_UNPAUSED}`);
             }else{
                 serverQueue.streamDispatcher.resume();
-                msg.channel.send(`Unpaused: ${serverQueue.songs[0].title}`);
+                msg.channel.send(`Unpaused: **${serverQueue.songs[0].title}**`);
             }
         }
     },
