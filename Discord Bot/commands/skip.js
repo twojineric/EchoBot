@@ -13,9 +13,14 @@ module.exports = {
         if(!serverQueue){
             msg.channel.send(command_messages.NO_SONG_PLAYING);
             return;
+        }else{
+            // first, close the current stream
+            serverQueue.streamDispatcher.destroy();
+            
+            // now, shift the queue           
+            const skippedSong = serverQueue.songs.shift();
+            msg.channel.send(`Skipped: **${skippedSong.title}**`);
+            play.execute(msg, serverQueue);
         }
-        const skippedSong = serverQueue.songs.shift();
-        msg.channel.send(`Skipped: **${skippedSong.title}**`);
-        play.execute(msg, serverQueue);
     },
 };

@@ -32,13 +32,15 @@ module.exports = {
                 serverQueue.connection = connection;
                 msg.channel.send(`Playing: **${song.title}**`);
                 serverQueue.streamDispatcher = connection.play(ytdl(song.url, {quality: 'highestaudio'}));
+                
                 // when we're done, shift the array and play again until queue is empty
                 serverQueue.streamDispatcher.on('finish', () => {
                     msg.channel.send(command_messages.DONE_PLAYING_VIDEO);
                     serverQueue.songs.shift();
                     this.execute(msg, serverQueue);
                 });
-
+                
+                // if something goes wrong
                 serverQueue.streamDispatcher.on('error', error => {
                     console.error(error);
                     return;

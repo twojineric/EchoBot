@@ -15,6 +15,7 @@ module.exports = {
             // first, we have to check if it exists, of course. If it does, delete it. Otherwise, no problem.
             const globalQueue = queue.globalQueue;
             if(globalQueue.get(msg.guild.id)){
+                globalQueue.get(msg.guild.id).streamDispatcher.destroy();
                 globalQueue.delete(msg.guild.id);
                 msg.channel.send(command_messages.QUEUE_EMPTY);
             }

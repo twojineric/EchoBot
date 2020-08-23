@@ -8,8 +8,8 @@ module.exports = {
         const join = require('./join.js');
         const play = require('./play.js');
         const search = require('./search.js');
-
-        // handle the empty arguments case
+        
+        // handle the empty arguments case, print the queue
         if(argsArray.length === 0){
             const nowPlaying = require('./nowPlaying.js');
             nowPlaying.execute(msg);
@@ -33,24 +33,14 @@ module.exports = {
 
         // retrieve this server's song queue, if it exists
         const serverQueue = this.globalQueue.get(msg.guild.id);
-
         // create a song object for the info for this video, which is guaranteed to be a valid URL
         const songInfo = await ytdl.getInfo(URL);
-        const song = {
-            title: songInfo.videoDetails.title,
-            url: songInfo.videoDetails.video_url,
-        };
+        const song = this.Song(songInfo);
 
         // now, add the song into the queue. To do so, check if the queue exists
         if(!serverQueue){
             // if there's no queue for this server, let's construct one
-            const newServerQueue = {
-                textChannel: msg.channel,
-                connection: null,
-                songs: [],
-                playing: true,
-                streamDispatcher: null
-            };
+            const newServerQueue = this.ServerQueue(msg);
 
             // add this newly created server queue to the global queue and add in the song
             this.globalQueue.set(msg.guild.id, newServerQueue);
@@ -70,4 +60,30 @@ module.exports = {
             msg.channel.send(`**${song.title}** ${command_messages.ADDED_TO_QUEUE}`);
         }
     },
+    /**
+     * Creates a blank new server queue
+     * @param {Message} msg
+     * @returns Returns a blank new server queue
+     */
+    ServerQueue(msg){
+        return {
+            textChannel: msg.channel,
+            connection: null,
+            songs: [],
+            playing: true,
+            streamDispatcher: null
+        };
+    },
+    
+    /**
+     * Constructs a new Song object from songInfo
+     * @param songInfo
+     * @returns a new Song object
+     */
+    Song(songInfo){
+        return {
+            title: songInfo.videoDetails.title,
+            url: songInfo.videoDetails.video_url,
+        };
+    }
 };
