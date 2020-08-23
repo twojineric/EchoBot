@@ -8,7 +8,7 @@ module.exports = {
         const join = require('./join.js');
         const play = require('./play.js');
         const search = require('./search.js');
-        
+
         // handle the empty arguments case, print the queue
         if(argsArray.length === 0){
             const nowPlaying = require('./nowPlaying.js');
@@ -35,12 +35,12 @@ module.exports = {
         const serverQueue = this.globalQueue.get(msg.guild.id);
         // create a song object for the info for this video, which is guaranteed to be a valid URL
         const songInfo = await ytdl.getInfo(URL);
-        const song = this.Song(songInfo);
+        const song = new Song(songInfo);
 
         // now, add the song into the queue. To do so, check if the queue exists
         if(!serverQueue){
             // if there's no queue for this server, let's construct one
-            const newServerQueue = this.ServerQueue(msg);
+            const newServerQueue = new ServerQueue(msg);
 
             // add this newly created server queue to the global queue and add in the song
             this.globalQueue.set(msg.guild.id, newServerQueue);
@@ -60,30 +60,38 @@ module.exports = {
             msg.channel.send(`**${song.title}** ${command_messages.ADDED_TO_QUEUE}`);
         }
     },
-    /**
-     * Creates a blank new server queue
-     * @param {Message} msg
-     * @returns Returns a blank new server queue
-     */
-    ServerQueue(msg){
-        return {
-            textChannel: msg.channel,
-            connection: null,
-            songs: [],
-            playing: true,
-            streamDispatcher: null
-        };
-    },
-    
-    /**
-     * Constructs a new Song object from songInfo
-     * @param songInfo
-     * @returns a new Song object
-     */
-    Song(songInfo){
-        return {
-            title: songInfo.videoDetails.title,
-            url: songInfo.videoDetails.video_url,
-        };
-    }
 };
+
+/**
+ * Creates a blank new server queue
+ * @param {Message} msg
+ * @returns Returns a blank new server queue
+ */
+function ServerQueue(msg){
+    if(!new .target){
+        return;
+    }
+
+    return {
+        textChannel: msg.channel,
+        connection: null,
+        songs: [],
+        playing: true,
+        streamDispatcher: null
+    };
+}
+/**
+ * Constructs a new Song object from songInfo
+ * @param songInfo
+ * @returns a new Song object
+ */
+function Song(songInfo){
+    if(!new.target){
+        return;
+    }
+
+    return {
+        title: songInfo.videoDetails.title,
+        url: songInfo.videoDetails.video_url,
+    };
+}
