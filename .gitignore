@@ -3,3 +3,5 @@ Discord Bot/node_modules
 .env
 /Discord Bot/nbproject/
 /Discord Bot/nbproject/*
+*.pcm
+EchoBot-STT-764d96508839.json
