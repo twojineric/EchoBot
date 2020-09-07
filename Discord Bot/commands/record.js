@@ -1,4 +1,3 @@
-const fs = require('fs');
 const join = require('./join.js');
 const GoogleSTT = require('@google-cloud/speech');
 const speechClient = new GoogleSTT.SpeechClient();
@@ -15,12 +14,35 @@ module.exports = {
         else
         {
             msg.member.voice.channel.join().then(connection => {
-                const audioStream = connection.receiver.createStream(msg.author, { mode: 'pcm' });
-                audioStream.pipe(fs.createWriteStream('audioFile.pcm'));
+                const audioStream = connection.receiver.createStream(msg.author, { mode: 'pcm'/*, end: 'manual' */});
+                //stream is 16bit stereo little-endian PCM audio
 
-                audioStream.on('data', () => console.log("writing data"));
+                //setTimeout(alertFunc, 5000, msg, audioStream);
 
-                 audioStream.on('end', async () => {
+                let dataStr = "";
+                audioStream.on('data', (rawData) => {
+                    console.log("Writing Data");
+                    dataStr = dataStr + rawData.toString('base64');
+                 });
+     /*
+                 audioStream.once('readable', () => {
+                     console.log("data exists!");
+                 });
+
+                 audioStream.on('end', () => {
+                    console.log("Paused");
+                    console.log(dataStr.length);
+                    let bufferData = audioStream.read();
+                    if(null !== bufferData)
+                    {
+                        dataStr = dataStr + bufferData.toString('base64');
+                    }
+                    console.log(dataStr.length);
+                    audioStream.destroy();
+                 });
+ */
+                 audioStream.once('end', async () => {
+                     if(dataStr.length == 0) return console.log("zero data received");
 
                      const audioRequest = {
                          "config": {
@@ -30,7 +52,7 @@ module.exports = {
                              "languageCode": "en-US",
                          },
                          "audio": {
-                             "content": fs.readFileSync('audioFile.pcm').toString('base64'),
+                             "content": dataStr,
                          },
                      };
 
@@ -42,17 +64,23 @@ module.exports = {
                              "Content-Type": "application/json",
                          }
                      };
-
+                     msg.channel.send("Processing now");
                      const response = await fetch(`https://speech.googleapis.com/v1p1beta1/speech:recognize?key=${process.env.CLOUD_APIKEY}`, options);
                      const { results } = await response.json();
                      msg.channel.send(results[0].alternatives[0].transcript);
 
-                     console.log('audioStream end');
+                     console.log('STT Done, Audiostream End');
                 });
             });
 
         }
-
-
     },
 };
+
+//WIP
+function alertFunc(msg, aS)
+{
+    console.log("You have been talking for 5sec now, closing stream!");
+    msg.channel.send("Time limit reached. Stream Ending!");
+    aS.pause();
+}
